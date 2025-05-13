@@ -1,0 +1,17 @@
+{
+  "name": "boilerplate_1",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {},
+  "devDependencies": {
+  "jest": "^29.0.0",
+  "ts-jest": "^29.0.0",
+  "@types/jest": "^29.0.0",
+  "typescript": "^5.0.0"
+}
+
+}

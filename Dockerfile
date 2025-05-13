@@ -1,8 +1,12 @@
 # Etapa 1: Build (compilar o TypeScript)
-FROM node:18-alpine AS builder
+FROM node:18-buster AS builder
 
 # Instala dependências de sistema para compilar libs nativas como bcrypt
-RUN apk add --no-cache python3 make g++
+RUN apt-get update && apt-get install -y \
+    python3 \
+    make \
+    g++ \
+    && rm -rf /var/lib/apt/lists/*
 
 # Define o diretório de trabalho
 WORKDIR /usr/src/app
@@ -21,12 +25,9 @@ RUN npm run build
 
 
 # Etapa 2: Produção
-FROM node:18-alpine
+FROM node:18-buster
 
-# Instala compatibilidade com libs nativas
-RUN apk add --no-cache libc6-compat
-
-# Diretório da aplicação
+# Define o diretório da aplicação
 WORKDIR /usr/src/app
 
 # Copia apenas os arquivos de produção
