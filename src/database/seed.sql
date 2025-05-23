@@ -1,7 +1,7 @@
 -- Inserindo cozinheiras
 INSERT INTO public.cozinheira_tb (nome, email, senha) VALUES
-('Maria da Silva', 'maria@cantina.com', 'senha_hash_maria'),
-('Joana Souza', 'joana@cantina.com', 'senha_hash_joana');
+('Maria da Silva', 'maria@cantina.com', '123456'),
+('Joana Souza', 'joana@cantina.com', '123456');
 
 -- Inserindo pratos
 INSERT INTO public.prato_tb (dia, turno, principal, sobremesa, bebida, imagem, id_usuario) VALUES
