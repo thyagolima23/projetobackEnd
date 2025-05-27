@@ -1,41 +1,42 @@
-version: '3.8'
+version: "3.9"
 
 services:
-  app:
-  build:
-    context: .
-    dockerfile: Dockerfile.dev
-  ports:
-    - "3000:3000"
-  env_file:
-    - .env.dev
-  volumes:
-    - .:/app
-    - /app/node_modules
-  working_dir: /app
-  command: npm run dev
-  depends_on:
-    - db
-  networks:
-    - backend
-
+  api:
+    
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: api-dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+    env_file: .env.dev
+    depends_on:
+      - db
+    networks:
+      - devnet
 
   db:
-    image: postgres:13
+    image: postgres:16
+    container_name: postgres-dev
     restart: always
-    environment:
-       POSTGRES_USER: ${POSTGRES_USER}  # Variáveis do arquivo .env
-       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-       POSTGRES_DB: ${POSTGRES_DB}
     ports:
-      - "5432:5432"  # útil para conectar pelo seu host (ex: DBeaver)
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: db_cantina
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
     networks:
-      - backend
-
-networks:
-  backend:
+      - devnet  
 
 volumes:
-  postgres_data:
+  pgdata: #Esse volume será criado (se não existir) e vai guardar os dados do PostgreSQL mesmo que você pare ou delete os contêineres. Fisicamente armazenado em /var/lib/docker/volumes/... no seu sistema.
+
+#Cria uma rede interna Docker chamada devnet.O serviço api consegue acessar o db usando db:5432 (não localhost).Os serviços se isolam de outras redes/containers fora do compose.
+networks:
+  devnet:
+    driver: bridge

@@ -11,3 +11,11 @@ Thumbs.db
 coverage/
 jest.config.js
 .dockerignore
+
+/generated/prisma
+
+/generated/prisma
+
+/generated/prisma
+
+/generated/prisma

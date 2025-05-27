@@ -1,19 +1,24 @@
-FROM node:18
+# Etapa base: Node 22 com Alpine (leve)
+FROM node:22
 
-# Diretório de trabalho dentro do container
-WORKDIR /app
+# Diretório de trabalho dentro do contêiner
+WORKDIR /usr/src/app
 
-# Copia apenas os arquivos de dependência inicialmente para cache de build
-COPY package*.json ./
+# Garantir npm 11 (vem com Node 22, mas pode forçar atualização)
+RUN npm install -g npm
 
-# Instala todas as dependências (inclusive as de dev)
+
+# Copiar arquivos de dependência primeiro (para cache funcionar melhor)
+COPY package.json package-lock.json* ./
+
+# Instalar dependências
 RUN npm install
 
-# Copia o restante dos arquivos da aplicação
+# Copiar o restante do código
 COPY . .
 
-# Expõe a porta que sua aplicação vai rodar (ajuste conforme necessário)
+# Abrir a porta 3000 para o app (ajuste se usar outra)
 EXPOSE 3000
 
-# Comando padrão (roda a aplicação com hot reload)
-CMD ["npm", "run", "dev"]
+# Comando padrão: hot reload com ts-node-dev
+CMD ["npx", "ts-node-dev", "--respawn", "--transpile-only", "src/index"]
